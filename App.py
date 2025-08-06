@@ -6,9 +6,9 @@ import google.generativeai as genai
 import pandas as pd
 
 # Setup Tesseract OCR
-pytesseract.pytesseract.tesseract_cmd = r'C:\\Program Files\\Tesseract-OCR\\tesseract.exe'
+#pytesseract.pytesseract.tesseract_cmd = r'C:\\Program Files\\Tesseract-OCR\\tesseract.exe'
 # Gemini API Setup
-genai.configure(api_key="st.secrets["apikey"]")
+genai.configure(api_key=st.secrets["apikey"])
 model = genai.GenerativeModel("gemini-2.5-flash")
 # Sidebar
 st.sidebar.title(":clipboard: Menu")
