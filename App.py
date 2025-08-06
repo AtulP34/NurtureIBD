@@ -5,33 +5,10 @@ from PIL import Image
 import google.generativeai as genai
 import pandas as pd
 
-st.markdown("""
-            <style>
-            @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
-            
-            html, body, [class*="css"] {
-                font-family: 'SF Pro Display', 'SF Pro Text', -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Inter', 'Helvetica Neue', Arial, sans-serif !important;
-            }
-            
-            .main .block-container {
-                font-family: 'SF Pro Display', 'SF Pro Text', -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Inter', 'Helvetica Neue', Arial, sans-serif !important;
-            }
-            
-            h1, h2, h3, h4, h5, h6 {
-                font-family: 'SF Pro Display', 'SF Pro Text', -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Inter', 'Helvetica Neue', Arial, sans-serif !important;
-            }
-            
-            .stSelectbox label, .stSelectbox div {
-                font-family: 'SF Pro Display', 'SF Pro Text', -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Inter', 'Helvetica Neue', Arial, sans-serif !important;
-            }
-            </style>
-            """, unsafe_allow_html=True)
-
-
 # Setup Tesseract OCR
 pytesseract.pytesseract.tesseract_cmd = r'C:\\Program Files\\Tesseract-OCR\\tesseract.exe'
 # Gemini API Setup
-genai.configure(api_key="AIzaSyDMgl_T8NEN0nq7XbGZWE4w7fNf07d84ZE")
+genai.configure(api_key="st.secrets["apikey"]")
 model = genai.GenerativeModel("gemini-2.5-flash")
 # Sidebar
 st.sidebar.title(":clipboard: Menu")
@@ -40,7 +17,7 @@ page = st.sidebar.selectbox("Go to", ["Patient Entry & Upload", "AI Analysis"])
 if 'patient_history' not in st.session_state:
     st.session_state.patient_history = {
         "Name": "",
-        "Age": 18,
+        "Age": "",
         "Gender": "",
         "Height": "",
         "Weight": "",
