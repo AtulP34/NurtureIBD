@@ -4,9 +4,8 @@ import pytesseract
 from PIL import Image
 import google.generativeai as genai
 import pandas as pd
-
 # Setup Tesseract OCR
-#pytesseract.pytesseract.tesseract_cmd = r'C:\\Program Files\\Tesseract-OCR\\tesseract.exe'
+pytesseract.pytesseract.tesseract_cmd = r'C:\\Program Files\\Tesseract-OCR\\tesseract.exe'
 # Gemini API Setup
 genai.configure(api_key=st.secrets["apikey"])
 model = genai.GenerativeModel("gemini-2.5-flash")
@@ -17,7 +16,7 @@ page = st.sidebar.selectbox("Go to", ["Patient Entry & Upload", "AI Analysis"])
 if 'patient_history' not in st.session_state:
     st.session_state.patient_history = {
         "Name": "",
-        "Age": "",
+        "Age": 18,
         "Gender": "",
         "Height": "",
         "Weight": "",
@@ -33,8 +32,7 @@ if 'patient_history' not in st.session_state:
 if 'uploaded_text' not in st.session_state:
     st.session_state.uploaded_text = ""
 if page == "Patient Entry & Upload":
-    st.markdown("""<h1 style = 'color: #F8BCC; text-align: center;'>Patient Entry & Document Upload</h1>
-                """, unsafe_allow_html=True)
+    st.title(":hospital: Patient Entry & Document Upload")
     # Patient form inputs
     st.session_state.patient_history["Name"] = st.text_input(":bust_in_silhouette: Name", st.session_state.patient_history["Name"])
     st.session_state.patient_history["Age"] = st.number_input(":birthday: Age", min_value=2, max_value=100, value=st.session_state.patient_history["Age"])
@@ -62,8 +60,8 @@ if page == "Patient Entry & Upload":
             st.markdown(f"**{key}:** {value if value else '—'}")
     # File Upload
     st.markdown("---")
-    st.subheader(":page_facing_up: Document Upload & Processing")
-    uploaded_file = st.file_uploader("Choose a file", type=['pdf', 'png', 'jpg', 'jpeg'])
+    st.subheader(":page_facing_up: Upload Blood Report Here")
+    uploaded_file = st.file_uploader("Choose a file", type=['pdf'])
     if uploaded_file is not None:
         file_type = uploaded_file.type
         if "pdf" in file_type:
@@ -129,7 +127,8 @@ Only use these exact headings. Do not use different symbols or formats.
 Patient Info:
 {full_context}
 Details:
-- Diet Plan: Based on diseases, allergies, goals, create a diet plan that will benefit the patient and allow them to be pain free. Use data from blood report to factor into plan
+- Diet Plan: Based on diseases, allergies, goals, create a diet plan that will benefit the patient and allow them to be pain free. Use data from blood report to factor into plan. Give
+tham actual products and meals that they can have for breakfast, lunch, and dinner. Plan out their meals for the next week, give options for meal prepped meals and freshly made meals.
 - Medication Schedule: suggest medications based on patient medical data and create a schedule based on when they are supposed to take medication
 - Blood Analysis Report: If any lab data is included, interpret simply. Input information from the blood analysis report to create a more cohesive diet plan
 Avoid making a diagnosis or using overly technical terms.
@@ -147,7 +146,7 @@ Avoid making a diagnosis or using overly technical terms.
     # Optional: regenerate
     if st.button(":repeat: Regenerate AI Analysis"):
         st.session_state.pop('ai_response', None)
-        st.experimental_rerun()
+        st.rerun()
     # Split and map AI response by headers
     sections = st.session_state.ai_response.split("## ")
     section_map = {}
